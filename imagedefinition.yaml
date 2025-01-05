@@ -1,0 +1,53 @@
+$schema: "1.0"
+name: "courseimage"
+# Using the "Windows 11 Enterprise 24H2" image as the base
+image: microsoftwindowsdesktop_windows-ent-cpc_win11-24H2-ent-cpc
+description: "This definition is for the eShop frontend engineering environment"
+
+tasks:
+  - name: ~/winget
+    description: Install AZD
+    parameters:
+      package:  Microsoft.Azd
+
+  - name: ~/winget
+    description: Install Visual Studio Code
+    parameters:
+      package:  Microsoft.VisualStudioCode
+
+  - name: ~/winget
+    description: Install PyCharm
+    parameters:
+      package:  JetBrains.PyCharm.Community
+
+  - name: ~/winget
+    description: Install Python
+    parameters:
+      package:  Python.Python.3.12
+
+  - name: ~/powershell
+    parameters:
+      command: |
+        python.exe -m pip install --upgrade pip;
+        pip install tensorflow;
+        pip install torch torchvision torchaudio;
+        pip install opencv-python
+
+  - name: ~/winget
+    description: Install Anaconda
+    parameters:
+      package:  Anaconda.Anaconda3
+
+  - name: ~/powershell
+    parameters:
+      command: |
+        $env:Path = [System.Environment]::GetEnvironmentVariable('Path','Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path','User') 
+        code --install-extension github.copilot
+        code --install-extension github.copilot-chat        
+        code --install-extension GitHub.vscode-github-actions
+        code --install-extension ms-vscode-remote.remote-wsl
+        code --install-extension ms-vscode-remote.remote-containers
+        code --install-extension ms-azuretools.azure-dev
+        code --install-extension ms-azuretools.vscode-docker
+        code --install-extension ms-dotnettools.csdevkit
+        code --install-extension ms-dotnettools.dotnet-maui
