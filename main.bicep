@@ -43,6 +43,7 @@ module devcenter 'modules/devcenter.bicep' = {
     projectDescription: projectName
     keyVaultName: keyvaultName
     catalogName: catalogName
+    secretValue: githubToken
   }
 }
 

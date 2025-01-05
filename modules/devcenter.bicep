@@ -141,10 +141,10 @@ resource catalog 'Microsoft.DevCenter/projects/catalogs@2024-08-01-preview' = {
   name: '${project.name}/${catalogName}'
   properties: {
     gitHub: {
-      uri: 'https://github.com/GHETestOrg-JZ/contoso-co-eShop.git'
+      uri: 'https://github.com/jacwu/devbox-teamcustomization-template.git'
       branch: 'main'
       secretIdentifier: secret.properties.secretUri
-      path: '.devcenter/catalog/image-definitions/frontend'
+      path: 'imagedefinitions'
     }
     syncType: 'Scheduled'
   }
