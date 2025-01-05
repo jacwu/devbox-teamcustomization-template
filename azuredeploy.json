@@ -1,0 +1,454 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.32.4.45862",
+      "templateHash": "4328658648815058886"
+    }
+  },
+  "parameters": {
+    "projectName": {
+      "type": "string",
+      "defaultValue": "course",
+      "minLength": 3,
+      "maxLength": 12,
+      "metadata": {
+        "description": "The name of the course"
+      }
+    }
+  },
+  "variables": {
+    "project": "[replace(parameters('projectName'), ' ', '')]",
+    "vnetAddressPrefixes": "10.4.0.0/16",
+    "subnetAddressPrefixes": "10.4.0.0/16",
+    "suffix": "[format('{0}-{1}', variables('project'), take(guid(variables('project')), 4))]",
+    "xjtlu": "[variables('suffix')]",
+    "ncName": "[format('nc-{0}', variables('xjtlu'))]",
+    "devcenterName": "[format('dc-{0}', variables('xjtlu'))]",
+    "vnetName": "[format('vnet-{0}', variables('xjtlu'))]",
+    "subnetName": "[format('subnet-{0}', variables('xjtlu'))]",
+    "keyvaultName": "[format('kv-{0}', variables('xjtlu'))]",
+    "catalogName": "[format('catalog-{0}', variables('suffix'))]",
+    "location": "eastasia"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "vnet",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[variables('location')]"
+          },
+          "vnetAddressPrefixes": {
+            "value": "[variables('vnetAddressPrefixes')]"
+          },
+          "vnetName": {
+            "value": "[variables('vnetName')]"
+          },
+          "subnetAddressPrefixes": {
+            "value": "[variables('subnetAddressPrefixes')]"
+          },
+          "subnetName": {
+            "value": "[variables('subnetName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.32.4.45862",
+              "templateHash": "3524106673569938126"
+            }
+          },
+          "parameters": {
+            "vnetName": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of the Virtual Network"
+              }
+            },
+            "subnetName": {
+              "type": "string",
+              "metadata": {
+                "description": "the app subnet name of Dev Box"
+              }
+            },
+            "vnetAddressPrefixes": {
+              "type": "string",
+              "metadata": {
+                "description": "The address prefixes of the vnet"
+              }
+            },
+            "subnetAddressPrefixes": {
+              "type": "string",
+              "metadata": {
+                "description": "The subnet address prefixes for Dev Box"
+              }
+            },
+            "location": {
+              "type": "string",
+              "metadata": {
+                "description": "The location of the resource"
+              }
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Network/virtualNetworks",
+              "apiVersion": "2022-11-01",
+              "name": "[parameters('vnetName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "addressSpace": {
+                  "addressPrefixes": [
+                    "[parameters('vnetAddressPrefixes')]"
+                  ]
+                },
+                "subnets": [
+                  {
+                    "name": "[parameters('subnetName')]",
+                    "properties": {
+                      "addressPrefix": "[parameters('subnetAddressPrefixes')]"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "outputs": {
+            "vnetName": {
+              "type": "string",
+              "value": "[parameters('vnetName')]"
+            },
+            "subnetName": {
+              "type": "string",
+              "value": "[parameters('subnetName')]"
+            },
+            "subnetId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "devcenter",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[variables('location')]"
+          },
+          "devcenterName": {
+            "value": "[variables('devcenterName')]"
+          },
+          "subnetId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'vnet'), '2022-09-01').outputs.subnetId.value]"
+          },
+          "networkConnectionName": {
+            "value": "[variables('ncName')]"
+          },
+          "projectName": {
+            "value": "[variables('project')]"
+          },
+          "projectDescription": {
+            "value": "[parameters('projectName')]"
+          },
+          "keyVaultName": {
+            "value": "[variables('keyvaultName')]"
+          },
+          "catalogName": {
+            "value": "[variables('catalogName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.32.4.45862",
+              "templateHash": "12845036931591467032"
+            }
+          },
+          "parameters": {
+            "devcenterName": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of Dev Center e.g. dc-devbox-test"
+              }
+            },
+            "networkConnectionName": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of Network Connection e.g. con-devbox-test"
+              }
+            },
+            "projectName": {
+              "type": "string",
+              "metadata": {
+                "description": "The name of Dev Center project e.g. dcprj-devbox-test"
+              }
+            },
+            "projectDescription": {
+              "type": "string",
+              "metadata": {
+                "description": "raw project name"
+              }
+            },
+            "subnetId": {
+              "type": "string",
+              "metadata": {
+                "description": "The resource id of Virtual network subnet"
+              }
+            },
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]",
+              "metadata": {
+                "description": "Primary location for all resources e.g. eastus"
+              }
+            },
+            "keyVaultName": {
+              "type": "string",
+              "metadata": {
+                "description": "Specifies the name of the key vault."
+              }
+            },
+            "catalogName": {
+              "type": "string",
+              "metadata": {
+                "description": "the catalog name"
+              }
+            },
+            "tenantId": {
+              "type": "string",
+              "defaultValue": "[subscription().tenantId]",
+              "metadata": {
+                "description": "Specifies the Azure Active Directory tenant ID that should be used for authenticating requests to the key vault. Get it by using Get-AzSubscription cmdlet."
+              }
+            },
+            "secretName": {
+              "type": "string",
+              "defaultValue": "githubtoken",
+              "metadata": {
+                "description": "Specifies the name of the secret that you want to create."
+              }
+            },
+            "secretValue": {
+              "type": "securestring",
+              "defaultValue": "",
+              "metadata": {
+                "description": "Specifies the value of the secret that you want to create."
+              }
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.DevCenter/devcenters",
+              "apiVersion": "2024-08-01-preview",
+              "name": "[parameters('devcenterName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "projectCatalogSettings": {
+                  "catalogItemSyncEnableStatus": "Enabled"
+                },
+                "networkSettings": {
+                  "microsoftHostedNetworkEnableStatus": "Disabled"
+                },
+                "devBoxProvisioningSettings": {
+                  "installAzureMonitorAgentEnableStatus": "Enabled"
+                }
+              }
+            },
+            {
+              "type": "Microsoft.DevCenter/networkConnections",
+              "apiVersion": "2024-08-01-preview",
+              "name": "[parameters('networkConnectionName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "domainJoinType": "AzureADJoin",
+                "subnetId": "[parameters('subnetId')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/devcenters', parameters('devcenterName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.DevCenter/devcenters/attachednetworks",
+              "apiVersion": "2024-08-01-preview",
+              "name": "[format('{0}/{1}', parameters('devcenterName'), parameters('networkConnectionName'))]",
+              "properties": {
+                "networkConnectionId": "[resourceId('Microsoft.DevCenter/networkConnections', parameters('networkConnectionName'))]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/devcenters', parameters('devcenterName'))]",
+                "[resourceId('Microsoft.DevCenter/networkConnections', parameters('networkConnectionName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.DevCenter/projects",
+              "apiVersion": "2024-08-01-preview",
+              "name": "[parameters('projectName')]",
+              "location": "[parameters('location')]",
+              "identity": {
+                "type": "SystemAssigned"
+              },
+              "properties": {
+                "devCenterId": "[resourceId('Microsoft.DevCenter/devcenters', parameters('devcenterName'))]",
+                "maxDevBoxesPerUser": 1,
+                "displayName": "[parameters('projectDescription')]",
+                "catalogSettings": {
+                  "catalogItemSyncTypes": [
+                    "EnvironmentDefinition",
+                    "ImageDefinition"
+                  ]
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/devcenters/attachednetworks', parameters('devcenterName'), parameters('networkConnectionName'))]",
+                "[resourceId('Microsoft.DevCenter/devcenters', parameters('devcenterName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults",
+              "apiVersion": "2024-04-01-preview",
+              "name": "[parameters('keyVaultName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "enabledForDeployment": "false",
+                "enabledForDiskEncryption": "false",
+                "enabledForTemplateDeployment": "false",
+                "tenantId": "[parameters('tenantId')]",
+                "enableSoftDelete": true,
+                "enableRbacAuthorization": true,
+                "softDeleteRetentionInDays": 90,
+                "sku": {
+                  "name": "standard",
+                  "family": "A"
+                },
+                "networkAcls": {
+                  "defaultAction": "Allow",
+                  "bypass": "None",
+                  "ipRules": [],
+                  "virtualNetworkRules": []
+                }
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2024-04-01-preview",
+              "name": "[format('{0}/{1}', parameters('keyVaultName'), parameters('secretName'))]",
+              "properties": {
+                "value": "[parameters('secretValue')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Authorization/roleAssignments",
+              "apiVersion": "2022-04-01",
+              "scope": "[format('Microsoft.KeyVault/vaults/{0}', parameters('keyVaultName'))]",
+              "name": "[guid(resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName')), '4633458b-17de-408a-b874-0445c86b69e6')]",
+              "properties": {
+                "roleDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6')]",
+                "principalId": "[reference(resourceId('Microsoft.DevCenter/projects', parameters('projectName')), '2024-08-01-preview', 'full').identity.principalId]",
+                "principalType": "ServicePrincipal"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName'))]",
+                "[resourceId('Microsoft.DevCenter/projects', parameters('projectName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.DevCenter/projects/catalogs",
+              "apiVersion": "2024-08-01-preview",
+              "name": "[format('{0}/{1}', parameters('projectName'), parameters('catalogName'))]",
+              "properties": {
+                "gitHub": {
+                  "uri": "https://github.com/GHETestOrg-JZ/contoso-co-eShop.git",
+                  "branch": "main",
+                  "secretIdentifier": "[reference(resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyVaultName'), parameters('secretName')), '2024-04-01-preview').secretUri]",
+                  "path": ".devcenter/catalog/image-definitions/frontend"
+                },
+                "syncType": "Scheduled"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/projects', parameters('projectName'))]",
+                "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyVaultName'), parameters('secretName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Resources/deploymentScripts",
+              "apiVersion": "2020-10-01",
+              "name": "WaitSection",
+              "location": "[parameters('location')]",
+              "kind": "AzurePowerShell",
+              "properties": {
+                "azPowerShellVersion": "3.0",
+                "scriptContent": "start-sleep -Seconds 600",
+                "cleanupPreference": "Always",
+                "retentionInterval": "PT1H"
+              },
+              "dependsOn": [
+                "[extensionResourceId(resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName')), 'Microsoft.Authorization/roleAssignments', guid(resourceId('Microsoft.KeyVault/vaults', parameters('keyVaultName')), '4633458b-17de-408a-b874-0445c86b69e6'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.DevCenter/projects/pools",
+              "apiVersion": "2024-08-01-preview",
+              "name": "[format('{0}/pool1', parameters('projectName'))]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "devBoxDefinitionType": "Value",
+                "devBoxDefinitionName": "[format('~Catalog~{0}~courseimage', parameters('catalogName'))]",
+                "devBoxDefinition": {
+                  "imageReference": {
+                    "id": "[format('{0}/images/~Catalog~{1}~courseimage', resourceId('Microsoft.DevCenter/projects', parameters('projectName')), parameters('catalogName'))]"
+                  },
+                  "sku": {
+                    "name": "general_i_8c32gb256ssd_v2"
+                  }
+                },
+                "networkConnectionName": "[parameters('networkConnectionName')]",
+                "licenseType": "Windows_Client",
+                "localAdministrator": "Enabled",
+                "stopOnDisconnect": {
+                  "status": "Enabled",
+                  "gracePeriodMinutes": 60
+                },
+                "singleSignOnStatus": "Enabled",
+                "displayName": "pool1",
+                "virtualNetworkType": "Unmanaged"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.DevCenter/projects', parameters('projectName'))]",
+                "[resourceId('Microsoft.Resources/deploymentScripts', 'WaitSection')]"
+              ]
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'vnet')]"
+      ]
+    }
+  ]
+}

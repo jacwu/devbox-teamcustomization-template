@@ -1,0 +1,12 @@
+{
+  "$schema": "https://aka.ms/azure-quickstart-templates-metadata-schema#",
+  "type": "QuickStart",
+  "itemDisplayName": "Deploy Dev Box Service with team customize image",
+  "description": "This template provides a way to deploy an Dev Box service with team customize image.",
+  "summary": "This template provides a way to deploy an Dev Box service with team customize image.",
+  "githubUsername": "jacwu",
+  "dateUpdated": "2025-01-05",
+  "environments": [
+    "AzureCloud"
+  ]
+}
