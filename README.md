@@ -1,5 +1,5 @@
 
-# Deploy Dev Box Service with built-in image
+# Deploy Dev Box Service with team customization image
 
 az bicep build --file .\main.bicep --outfile azuredeploy.json
 
