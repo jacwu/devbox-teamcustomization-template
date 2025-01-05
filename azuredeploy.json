@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.32.4.45862",
-      "templateHash": "4328658648815058886"
+      "templateHash": "16885779852518594116"
     }
   },
   "parameters": {
@@ -16,6 +16,13 @@
       "maxLength": 12,
       "metadata": {
         "description": "The name of the course"
+      }
+    },
+    "githubToken": {
+      "type": "string",
+      "defaultValue": "github token",
+      "metadata": {
+        "description": "The github token to fetch image definition"
       }
     }
   },
@@ -175,6 +182,9 @@
           },
           "catalogName": {
             "value": "[variables('catalogName')]"
+          },
+          "secretValue": {
+            "value": "[parameters('githubToken')]"
           }
         },
         "template": {
@@ -184,7 +194,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.32.4.45862",
-              "templateHash": "12845036931591467032"
+              "templateHash": "6738275778322231530"
             }
           },
           "parameters": {
@@ -383,10 +393,10 @@
               "name": "[format('{0}/{1}', parameters('projectName'), parameters('catalogName'))]",
               "properties": {
                 "gitHub": {
-                  "uri": "https://github.com/GHETestOrg-JZ/contoso-co-eShop.git",
+                  "uri": "https://github.com/jacwu/devbox-teamcustomization-template.git",
                   "branch": "main",
                   "secretIdentifier": "[reference(resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyVaultName'), parameters('secretName')), '2024-04-01-preview').secretUri]",
-                  "path": ".devcenter/catalog/image-definitions/frontend"
+                  "path": "imagedefinitions"
                 },
                 "syncType": "Scheduled"
               },

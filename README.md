@@ -1,32 +1,12 @@
----
-description: This template provides a way to deploy an Dev Box service with built-in image.
-page_type: sample
-products:
-- azure
-- azure-resource-manager
-urlFragment: devbox-with-builtin-image
-languages:
-- bicep
-- json
----
+
 # Deploy Dev Box Service with built-in image
 
-![Azure Public Test Date](https://azurequickstartsservice.blob.core.windows.net/badges/quickstarts/microsoft.devcenter/devbox-with-builtin-image/PublicLastTestDate.svg)
-![Azure Public Test Result](https://azurequickstartsservice.blob.core.windows.net/badges/quickstarts/microsoft.devcenter/devbox-with-builtin-image/PublicDeployment.svg)
+az bicep build --file .\main.bicep --outfile azuredeploy.json
 
-![Azure US Gov Last Test Date](https://azurequickstartsservice.blob.core.windows.net/badges/quickstarts/microsoft.devcenter/devbox-with-builtin-image/FairfaxLastTestDate.svg)
-![Azure US Gov Last Test Result](https://azurequickstartsservice.blob.core.windows.net/badges/quickstarts/microsoft.devcenter/devbox-with-builtin-image/FairfaxDeployment.svg)
+[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjacwu%2Fdevbox-teamcustomization-template%2Frefs%2Fheads%2Fmain%2Fazuredeploy.json)
 
-![Best Practice Check](https://azurequickstartsservice.blob.core.windows.net/badges/quickstarts/microsoft.devcenter/devbox-with-builtin-image/BestPracticeResult.svg)
-![Cred Scan Check](https://azurequickstartsservice.blob.core.windows.net/badges/quickstarts/microsoft.devcenter/devbox-with-builtin-image/CredScanResult.svg)
 
-![Bicep Version](https://azurequickstartsservice.blob.core.windows.net/badges/quickstarts/microsoft.devcenter/devbox-with-builtin-image/BicepVersion.svg)
-
-[![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-quickstart-templates%2Fmaster%2Fquickstarts%2Fmicrosoft.devcenter%2Fdevbox-with-builtin-image%2Fazuredeploy.json)
-
-[![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-quickstart-templates%2Fmaster%2Fquickstarts%2Fmicrosoft.devcenter%2Fdevbox-with-builtin-image%2Fazuredeploy.json) 
-
-This template provides a way to deploy a Dev Box service with built-in image incluing Dev Center, Dev box Project, Dev box Definition, Dev box pool, Network connection and Virtual Netowrk.
+This template provides a way to deploy a Dev Box service with team customization image incluing Dev Center, Dev box Project, Dev box Definition, Dev box pool, Network connection and Virtual Netowrk.
 
 If you're new to **Dev Box**, see:
 
