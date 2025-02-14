@@ -29,8 +29,6 @@ tasks:
     parameters:
       command: |
         python.exe -m pip install --upgrade pip;
-        pip install tensorflow;
-        pip install torch torchvision torchaudio;
         pip install opencv-python
 
   - name: ~/winget
