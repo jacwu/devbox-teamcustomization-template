@@ -38,7 +38,7 @@
     "subnetName": "[format('subnet-{0}', variables('xjtlu'))]",
     "keyvaultName": "[format('kv-{0}', variables('xjtlu'))]",
     "catalogName": "[format('catalog-{0}', variables('suffix'))]",
-    "location": "eastasia"
+    "location": "eastus2"
   },
   "resources": [
     {
